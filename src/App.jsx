@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import products from "./data/products";
 import ProductCard from "./components/ProductCard";
 import SearchBar from "./components/SearchBar";
@@ -25,6 +25,7 @@ useEffect(() => {
     setLastAdded(title);
   };
 
+  
   const handleClear = () => {
     setSearchText("");
     setDebouncedSearch("");
