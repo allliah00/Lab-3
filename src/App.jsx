@@ -13,6 +13,13 @@ function App() {
   const [category, setCategory] = useState("All");
   const [sortOrder, setSortOrder] = useState("default");
 
+useEffect(() => {
+  const timer = setTimeout(() => {
+    debouncedSearch.trim();
+  }, 300);
+  return () => clearTimeout(timer);
+}, [searchText]);
+
   const handleAddToCart = (title) => {
     setCount(count + 1);
     setLastAdded(title);
