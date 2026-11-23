@@ -41,6 +41,10 @@ useEffect(() => {
       return 0;
     });
 
+    useEffect(() => {
+  document.title = `CvSU Mini Store (${filteredProducts.length} results)`;
+}, [filteredProducts.length]);
+
   return (
     <div className="app">
       <h1>CvSU Mini Store</h1>
@@ -51,7 +55,7 @@ useEffect(() => {
           : `Items added to cart: ${count} (Last added: ${lastAdded})`}
       </p>
 
-      <SearchBar
+            <SearchBar
         searchText={searchText}
         onSearchChange={setSearchText}
         category={category}
@@ -61,24 +65,38 @@ useEffect(() => {
         onClear={handleClear}
       />
 
-      <div className="grid">
-        {filteredProducts.map((product) => (
-          <ProductCard
-            key={product.id}
-            title={product.title}
-            price={product.price}
-            category={product.category}
-            inStock={product.inStock}
-            onAddToCart={handleAddToCart}
-          >
-            {product.badge && (
-              <span className={`badge ${product.badge.toLowerCase()}`}>
-                {product.badge}
-              </span>
-            )}
-          </ProductCard>
-        ))}
-      </div>
+      <p className="results-count">
+        Showing {filteredProducts.length} of {products.length} products
+      </p>
+
+           <p className="results-count">
+        Showing {filteredProducts.length} of {products.length} products
+      </p>
+
+      {filteredProducts.length === 0 ? (
+        <p className="empty-state">
+          No products found. Try a different keyword or category.
+        </p>
+      ) : (
+        <div className="grid">
+          {filteredProducts.map((product) => (
+            <ProductCard
+              key={product.id}
+              title={product.title}
+              price={product.price}
+              category={product.category}
+              inStock={product.inStock}
+              onAddToCart={handleAddToCart}
+            >
+              {product.badge && (
+                <span className={`badge ${product.badge.toLowerCase()}`}>
+                  {product.badge}
+                </span>
+              )}
+            </ProductCard>
+          ))}
+        </div>
+      )}
     </div>
   );
 }
