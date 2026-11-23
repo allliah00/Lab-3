@@ -1,16 +1,38 @@
 import { useState } from "react";
 import products from "./data/products";
 import ProductCard from "./components/ProductCard";
+import SearchBar from "./components/SearchBar";
 import "./App.css";
 
 function App() {
   const [count, setCount] = useState(0);
   const [lastAdded, setLastAdded] = useState("");
 
+  const [searchText, setSearchText] = useState("");
+  const [debouncedSearch, setDebouncedSearch] = useState("");
+  const [category, setCategory] = useState("All");
+  const [sortOrder, setSortOrder] = useState("default");
+
   const handleAddToCart = (title) => {
     setCount(count + 1);
     setLastAdded(title);
   };
+
+  const handleClear = () => {
+    setSearchText("");
+    setDebouncedSearch("");
+    setCategory("All");
+    setSortOrder("default");
+  };
+
+  const filteredProducts = [...products]
+    .filter((p) => p.title.toLowerCase().includes(searchText.trim().toLowerCase()))
+    .filter((p) => category === "All" || p.category === category)
+    .sort((a, b) => {
+      if (sortOrder === "low-high") return a.price - b.price;
+      if (sortOrder === "high-low") return b.price - a.price;
+      return 0;
+    });
 
   return (
     <div className="app">
@@ -22,8 +44,18 @@ function App() {
           : `Items added to cart: ${count} (Last added: ${lastAdded})`}
       </p>
 
+      <SearchBar
+        searchText={searchText}
+        onSearchChange={setSearchText}
+        category={category}
+        onCategoryChange={setCategory}
+        sortOrder={sortOrder}
+        onSortChange={setSortOrder}
+        onClear={handleClear}
+      />
+
       <div className="grid">
-        {products.map((product) => (
+        {filteredProducts.map((product) => (
           <ProductCard
             key={product.id}
             title={product.title}
